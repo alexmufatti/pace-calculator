@@ -1,9 +1,9 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk'
-import blog from './reducers/paceReducer';
+import pace from './reducers/paceReducer';
 import app from './reducers/appReducer';
 
-const rootReducer = combineReducers({ app, blog});
+const rootReducer = combineReducers({ app, pace});
 
 const composeEnhancers = window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || compose
 
