@@ -46,6 +46,9 @@ interface Props extends WithStyles<typeof styles> {
     distanceError: boolean,
     pace: string,
     paceError: boolean,
+    tenktime: string,
+    halfmarathontime: string,
+    marathontime: string,
     onChange: (event) => void
 }
 
@@ -106,6 +109,20 @@ class Main extends React.Component<Props, State> {
                                     <TextField variant="outlined" error={this.props.paceError} disabled={this.props.calcType == 'PACE'} name="pace" label="Pace (MM:SS)"
                                                className={classes.field} value={this.props.pace} onChange={this.onChange} margin="normal"/>
                                 </Grid>
+                            </Grid>
+                        </Paper>
+                        <Paper className={classes.paper}>
+                            <Grid item container direction="column" justify="center" alignItems="center">
+                                <FormLabel>Pace Prediction</FormLabel>
+                                <ListItem >
+                                    <ListItemText primary={this.props.tenktime} secondary="10 Km"/>
+                                </ListItem>
+                                <ListItem >
+                                    <ListItemText primary={this.props.halfmarathontime} secondary="Half marathon"/>
+                                </ListItem>
+                                <ListItem >
+                                    <ListItemText primary={this.props.marathontime} secondary="Marathon"/>
+                                </ListItem>
                             </Grid>
                         </Paper>
                         <Paper className={classes.paper}>

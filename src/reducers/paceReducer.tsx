@@ -8,7 +8,10 @@ const initialState = {
     timeError: false,
     pace: "0",
     paceError: false,
-    calcType: "PACE"
+    calcType: "PACE",
+    marathontime: '0',
+    halfmarathontime: '0',
+    tenktime: '0'
 }
 
 const rootReducer = (state = initialState, action) => {
@@ -74,6 +77,13 @@ const rootReducer = (state = initialState, action) => {
                     data.time = timeUtils.createTimeString(timeUtils.getTime(time));
                     break;
             }
+            let tenktime = '0';
+            let halfmarathontime = '0';
+            let marathontime = '0';
+
+            tenktime = timeUtils.createTimeString(timeUtils.getTime(timeUtils.getTotalSeconds(data.time)* Math.pow(10/parseFloat(data.distance),1.06)));
+            halfmarathontime = timeUtils.createTimeString(timeUtils.getTime(timeUtils.getTotalSeconds(data.time)* Math.pow(21.0975/parseFloat(data.distance),1.06)));
+            marathontime = timeUtils.createTimeString(timeUtils.getTime(timeUtils.getTotalSeconds(data.time)* Math.pow(42.195/parseFloat(data.distance),1.06)));
             return { ...state,
                 time: data.time,
                 distance:data.distance,
@@ -81,7 +91,10 @@ const rootReducer = (state = initialState, action) => {
                 timeError: data.timeError,
                 distanceError:data.distanceError,
                 paceError: data.paceError,
-                calcType: data.calcType};
+                calcType: data.calcType,
+                tenktime: tenktime,
+                halfmarathontime: halfmarathontime,
+                marathontime: marathontime};
         default:
             return state;
     }

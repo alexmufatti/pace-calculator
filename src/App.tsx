@@ -31,15 +31,23 @@ interface IProps {
     timeError,
     pace,
     paceError,
-    update
+    update,
+    marathontime,
+    halfmarathontime,
+    tenktime
 }
 
-class App extends React.Component<IProps, {}> {
+interface IState {
+    selectedTab: number
+}
+
+class App extends React.Component<IProps, IState> {
 
     constructor(props) {
         super(props);
         this.resize = this.resize.bind(this);
         this.changeCallback = this.changeCallback.bind(this);
+        this.state = { selectedTab: 0 };
     }
 
     resize() {
@@ -58,6 +66,10 @@ class App extends React.Component<IProps, {}> {
         this.props.update(event.target.name, event.target.value);
     }
 
+    handleChange = (event, value) => {
+        this.setState({ selectedTab: value });
+    };
+
     render() {
 
         return (
@@ -65,8 +77,9 @@ class App extends React.Component<IProps, {}> {
                 <MuiThemeProvider theme={theme}>
                     <CssBaseline/>
                     <Main calcType={this.props.calcType} distance={this.props.distance} time={this.props.time} pace={this.props.pace} paceError={this.props.paceError}
-                          timeError={this.props.timeError} distanceError={this.props.distanceError} onChange={this.changeCallback}/>
-                </MuiThemeProvider>
+                                                           timeError={this.props.timeError} distanceError={this.props.distanceError} onChange={this.changeCallback}
+                          marathontime={this.props.marathontime} tenktime={this.props.tenktime} halfmarathontime={this.props.halfmarathontime} />}
+                    </MuiThemeProvider>
             </div>
         )
     }
@@ -82,7 +95,10 @@ const mapStateToProps = state => {
         distance: state.pace.distance,
         distanceError: state.pace.distanceError,
         pace: state.pace.pace,
-        paceError: state.pace.paceError
+        paceError: state.pace.paceError,
+        tenktime: state.pace.tenktime,
+        marathontime: state.pace.marathontime,
+        halfmarathontime: state.pace.halfmarathontime
     }
 }
 

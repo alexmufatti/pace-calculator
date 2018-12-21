@@ -47,7 +47,10 @@ class TimeUtils {
 
     pad(value: string, char: string): string {
         value = value + '';
-        return char.substring(0, char.length - value.length) + value;
+        if (value.indexOf('.') >= 0)
+            return char.substring(0, char.length - value.split('.')[0].length) + value;
+        else
+            return char.substring(0, char.length - value.length) + value;
     }
 
     createTimeString(time: Time) {
