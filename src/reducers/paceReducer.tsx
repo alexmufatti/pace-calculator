@@ -1,4 +1,4 @@
-import {UPDATE, CALCULATE} from '../action-constants';
+import {UPDATE} from '../action-constants';
 import timeUtils from '../timeUtils';
 
 const initialState = {
@@ -45,7 +45,7 @@ const rootReducer = (state = initialState, action) => {
                     let totSec = timeUtils.getTotalSeconds(data.time.toString());
                     var pace = totSec / parseFloat(data.distance); //s/km
                     pace = isNaN(pace)?0:pace;
-                    data.pace = timeUtils.createPaceString(pace);
+                    data.pace = timeUtils.createPaceString(timeUtils.getTime(pace));
                     break;
                 case "DISTANCE":
                     data.distance = "";
@@ -71,7 +71,7 @@ const rootReducer = (state = initialState, action) => {
 
                     var time = totalDistance * totalSecPace;
 
-                    data.time = timeUtils.createTimeString(time);
+                    data.time = timeUtils.createTimeString(timeUtils.getTime(time));
                     break;
             }
             return { ...state,

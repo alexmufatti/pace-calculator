@@ -1,4 +1,4 @@
-import { RESIZE, CHANGE_LANGUAGE } from '../action-constants';
+import { RESIZE } from '../action-constants';
 const MOBILE_SCREEN_SIZE_LIMIT = 500;
 
 const initialState = {
@@ -15,8 +15,6 @@ const rootReducer = (state = initialState, action) => {
     switch (action.type) {
         case RESIZE:
             return { ...state, size: action.size, isMobile: isMobile(action.size) };
-        case CHANGE_LANGUAGE:
-            return { ...state, currentLanguage: action.currentLanguage };
         default:
             return state;
     }

@@ -151,7 +151,7 @@ class Main extends React.Component<Props, State> {
         const distance = parseFloat(this.props.distance);
         const laps = [...Array(Math.floor(distance)).keys()].map((v,idx)=> {
             const left = (distance - (idx+1) >= 1) ? idx+1 : distance;
-            return {key: 'Km ' + left, time: timeUtils.createTimeString(left * timeUtils.getTotalSeconds(this.props.pace))}})
+            return {key: 'Km ' + left, time: timeUtils.createTimeString(timeUtils.getTime(left * timeUtils.getTotalSeconds(this.props.pace)))}})
 
         this.setState((state) => {
             return {...state, laps: laps}
