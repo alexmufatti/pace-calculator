@@ -11,6 +11,7 @@ import Paper from "@material-ui/core/Paper";
 import timeUtils from '../timeUtils'
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Typography from "@material-ui/core/Typography";
 
 const styles = theme => createStyles({
     content: {
@@ -34,6 +35,12 @@ const styles = theme => createStyles({
         margin: theme.spacing.unit * 2,
         textAlign: 'center',
         color: theme.palette.text.secondary,
+    },
+    listItem: {
+        textAlign: 'right',
+    },
+    listItemKm: {
+        fontWeight: 'bold',
     },
 });
 
@@ -115,13 +122,16 @@ class Main extends React.Component<Props, State> {
                             <Grid item container direction="column" justify="center" alignItems="center">
                                 <FormLabel>Pace Prediction</FormLabel>
                                 <ListItem >
-                                    <ListItemText primary={this.props.tenktime} secondary="10 Km"/>
+                                    <ListItemText primary={<Typography variant="h6">10 Km</Typography>} />
+                                    <ListItemText primary={this.props.tenktime} className={classes.listItem} />
                                 </ListItem>
                                 <ListItem >
-                                    <ListItemText primary={this.props.halfmarathontime} secondary="Half marathon"/>
+                                    <ListItemText primary={<Typography variant="h6">Half marathon</Typography>} />
+                                    <ListItemText primary={this.props.halfmarathontime} className={classes.listItem} />
                                 </ListItem>
                                 <ListItem >
-                                    <ListItemText primary={this.props.marathontime} secondary="Marathon"/>
+                                    <ListItemText primary={<Typography variant="h6">Marathon</Typography>} />
+                                    <ListItemText primary={this.props.marathontime} className={classes.listItem} />
                                 </ListItem>
                             </Grid>
                         </Paper>
