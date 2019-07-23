@@ -1,5 +1,5 @@
 import { withStyles, createStyles, WithStyles } from "@material-ui/core/styles";
-import * as React from "react";
+import React from "react";
 import { TextField } from "@material-ui/core";
 import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -12,6 +12,10 @@ import timeUtils from "../timeUtils";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
+import Laps from "../Models/Lap";
+import PredictedTimes from "../Models/PredictedTimes";
+import Time from "../Models/Time";
+import TimeCalculator from "../Models/TimeCalulator";
 
 const styles = theme =>
   createStyles({
@@ -48,7 +52,7 @@ const styles = theme =>
 interface Props extends WithStyles<typeof styles> {}
 
 interface State {
-  laps: { key: string; time: string }[];
+  laps: Array<Laps>;
   calcType: string;
   time: string;
   timeError: boolean;
@@ -56,9 +60,7 @@ interface State {
   distanceError: boolean;
   pace: string;
   paceError: boolean;
-  tenktime: string;
-  halfmarathontime: string;
-  marathontime: string;
+  predictedTimes: PredictedTimes;
   showLaps: boolean;
 }
 
@@ -66,16 +68,14 @@ class Main extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
-      laps: [],
-      calcType: "0",
+      laps: new Array<Laps>(),
+      calcType: "PACE",
       time: "",
       distance: "0",
       distanceError: false,
-      halfmarathontime: "",
-      marathontime: "",
+      predictedTimes: new PredictedTimes("0", "0"),
       pace: "",
       paceError: false,
-      tenktime: "",
       timeError: false,
       showLaps: false
     };
@@ -84,7 +84,7 @@ class Main extends React.Component<Props, State> {
   render() {
     console.log("render...");
     const { classes } = this.props;
-    const data = this.calc();
+    const data: Any = this.calc();
     return (
       <div>
         <main className={classes.content}>
@@ -206,7 +206,7 @@ class Main extends React.Component<Props, State> {
                     primary={<Typography variant="h6">10 Km</Typography>}
                   />
                   <ListItemText
-                    primary={data.tenktime}
+                    primary={data.predictedTimes.tenTime.timeString()}
                     className={classes.listItem}
                   />
                 </ListItem>
@@ -217,7 +217,7 @@ class Main extends React.Component<Props, State> {
                     }
                   />
                   <ListItemText
-                    primary={data.halfmarathontime}
+                    primary={data.predictedTimes.halfMarathonTime.timeString()}
                     className={classes.listItem}
                   />
                 </ListItem>
@@ -226,7 +226,7 @@ class Main extends React.Component<Props, State> {
                     primary={<Typography variant="h6">Marathon</Typography>}
                   />
                   <ListItemText
-                    primary={data.marathontime}
+                    primary={data.predictedTimes.marathonTime.timeString()}
                     className={classes.listItem}
                   />
                 </ListItem>
@@ -251,10 +251,13 @@ class Main extends React.Component<Props, State> {
                 </Button>
               </Grid>
               <Grid item>
-                {data.laps.map((lap, i) => {
+                {data.laps.map(lap => {
                   return (
                     <ListItem key={lap.key}>
-                      <ListItemText primary={lap.time} secondary={lap.key} />
+                      <ListItemText
+                        primary={lap.time.timeString()}
+                        secondary={lap.key}
+                      />
                     </ListItem>
                   );
                 })}
@@ -267,9 +270,9 @@ class Main extends React.Component<Props, State> {
   }
 
   onChange = event => {
-    let data = {
+    let data: State = {
       ...this.state,
-      laps: []
+      laps: new Array<Laps>()
     };
 
     data[event.target.name] = event.target.value;
@@ -284,9 +287,7 @@ class Main extends React.Component<Props, State> {
       distanceError: data.distanceError,
       paceError: data.paceError,
       calcType: data.calcType,
-      tenktime: data.tenktime,
-      halfmarathontime: data.halfmarathontime,
-      marathontime: data.marathontime,
+      predictedTimes: data.predictedTimes,
       showLaps: data.showLaps
     });
   };
@@ -308,96 +309,37 @@ class Main extends React.Component<Props, State> {
     this.onChange({ target: { name: "showLaps", value: laps } });
   };
 
-  calcLaps = (
-    distance: string,
-    pace: string
-  ): { key: string; time: string }[] => {
+  calcLaps = (distance: string, pace: string): Array<Laps> => {
     const distanceF = parseFloat(this.state.distance);
     const laps = [...Array(Math.floor(distanceF)).keys()].map((v, idx) => {
       const left = distanceF - (idx + 1) >= 1 ? idx + 1 : distanceF;
-      return {
-        key: "Km " + left,
-        time: timeUtils.createTimeString(
-          timeUtils.getTime(left * timeUtils.getTotalSeconds(pace))
-        )
-      };
+      return new Laps(idx, pace, distanceF);
     });
 
     return laps;
   };
 
   calc = () => {
-    let data = { ...this.state };
-    switch (data.calcType) {
-      case "PACE":
-        console.log("calc pace...");
-        data.pace = "";
-        data.distanceError = !this.validateDistance(data.distance);
-        data.timeError = !this.validateTime(data.time);
-        if (data.distanceError || data.timeError) break;
-        let totSec = timeUtils.getTotalSeconds(data.time.toString());
-        var pace = totSec / parseFloat(data.distance); //s/km
-        pace = isNaN(pace) ? 0 : pace;
-        data.pace = timeUtils.createPaceString(timeUtils.getTime(pace));
-        break;
-      case "DISTANCE":
-        console.log("calc distance...");
-        data.distance = "";
-        data.timeError = !this.validateTime(data.time);
-        data.paceError = !this.validatePace(data.pace);
-        if (data.paceError || data.timeError) break;
-        var totalSec = timeUtils.getTotalSeconds(data.time);
-
-        var totalSecPace = timeUtils.getTotalSeconds(data.pace);
-
-        let distance = totalSec / totalSecPace;
-
-        data.distance = isNaN(distance) ? "0" : distance.toFixed(3);
-        break;
-      case "TIME":
-        console.log("calc time...");
-        data.time = "0";
-        data.distanceError = !this.validateDistance(data.distance);
-        data.paceError = !this.validatePace(data.pace);
-        if (data.paceError || data.distanceError) break;
-        var totalDistance = parseFloat(data.distance); //km
-        totalDistance = isNaN(totalDistance) ? 0 : totalDistance;
-        var totalSecPace = timeUtils.getTotalSeconds(data.pace);
-
-        var time = totalDistance * totalSecPace;
-
-        data.time = timeUtils.createTimeString(timeUtils.getTime(time));
-        break;
-    }
-    data.tenktime = "0";
-    data.halfmarathontime = "0";
-    data.marathontime = "0";
-
-    data.tenktime = timeUtils.createTimeString(
-      timeUtils.getTime(
-        timeUtils.getTotalSeconds(data.time) *
-          Math.pow(10 / parseFloat(data.distance), 1.06)
-      )
+    let calculator = new TimeCalculator(
+      this.state.calcType,
+      this.state.time,
+      this.state.distance,
+      this.state.pace
     );
-    data.halfmarathontime = timeUtils.createTimeString(
-      timeUtils.getTime(
-        timeUtils.getTotalSeconds(data.time) *
-          Math.pow(21.0975 / parseFloat(data.distance), 1.06)
-      )
+
+    let predictedTimes = new PredictedTimes(
+      calculator.time,
+      calculator.distance
     );
-    data.marathontime = timeUtils.createTimeString(
-      timeUtils.getTime(
-        timeUtils.getTotalSeconds(data.time) *
-          Math.pow(42.195 / parseFloat(data.distance), 1.06)
-      )
-    );
-    if (data.showLaps) {
+    let laps = Array<Laps>();
+    if (this.state.showLaps) {
       console.log("calculate laps");
-      data.laps = this.calcLaps(data.distance, data.pace);
+      laps = this.calcLaps(calculator.distance, calculator.pace);
     }
-    console.log(data);
     return {
-      ...data
+      ...calculator,
+      laps,
+      predictedTimes
     };
   };
 
