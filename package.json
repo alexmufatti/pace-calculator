@@ -16,10 +16,13 @@
     "typescript": "^3.2.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build && rm -rf docs && mv build docs",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "clear-build-cache": "rm -rf .cache/ dist/",
+    "dev": "parcel src/index.html",
+    "build": "rm -rf docs/* && cp src/CNAME docs/ && parcel build src/index.html --out-dir docs",
+    "dev:mock": "cross-env PET_MOCK=mock parcel src/index.html",
+    "format": "prettier --write \"src/**/*.{js,jsx}\"",
+    "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -31,13 +34,14 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "parcel-bundler": "^1.12.3",
     "cross-env": "^5.2.0",
     "eslint": "^5.12.1",
     "eslint-config-prettier": "^4.0.0",
     "eslint-plugin-import": "^2.15.0",
     "eslint-plugin-jsx-a11y": "^6.2.0",
     "eslint-plugin-react": "^7.12.4",
-    "eslint-plugin-react-hooks": "^1.0.2"
+    "eslint-plugin-react-hooks": "^1.0.2",
+    "parcel-bundler": "^1.12.3",
+    "prettier": "^1.18.2"
   }
 }
