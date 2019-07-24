@@ -18,44 +18,62 @@ class TimeCalculator {
     switch (this.calcType) {
       case "PACE":
         console.log("calc pace...");
-        this.pace = "";
         this.distanceError = !timeUtils.validateDistance(this.distance);
         this.timeError = !timeUtils.validateTime(this.time);
-        if (this.distanceError || this.timeError) break;
-        let totSec = Time.getTotalSeconds(this.time.toString());
-        var pace = totSec / parseFloat(this.distance); //s/km
-        pace = isNaN(pace) ? 0 : pace;
-        this.pace = Time.getTime(pace).createPaceString();
+        
+        if (this.distanceError || this.timeError) {
+          this.pace = "";
+          break;
+        }
+        this.pace = TimeCalculator.calcPace(this.distance, this.time);
         break;
       case "DISTANCE":
         console.log("calc distance...");
-        this.distance = "";
         this.timeError = !timeUtils.validateTime(this.time);
         this.paceError = !timeUtils.validatePace(this.pace);
-        if (this.paceError || this.timeError) break;
-        var totalSec = Time.getTotalSeconds(this.time);
-
-        var totalSecPace = Time.getTotalSeconds(this.pace);
-
-        let distance = totalSec / totalSecPace;
-
-        this.distance = isNaN(distance) ? "0" : distance.toFixed(3);
+        if (this.paceError || this.timeError) {
+          this.distance = "";
+          break;
+        }
+        this.distance = TimeCalculator.calcDistance(this.pace, this.time);
+        
         break;
       case "TIME":
         console.log("calc time...");
-        this.time = "0";
         this.distanceError = !timeUtils.validateDistance(this.distance);
         this.paceError = !timeUtils.validatePace(this.pace);
-        if (this.paceError || this.distanceError) break;
-        var totalDistance = parseFloat(this.distance); //km
+        if (this.paceError || this.distanceError) {
+          this.time = "0";
+          break;
+        }
+        this.time = TimeCalculator.calcTime(this.distance, this.pace);
+        break;
+    }
+  }
+  private static calcDistance(pace: string, time: string): string {
+    var totalSec = Time.getTotalSeconds(time);
+
+        var totalSecPace = Time.getTotalSeconds(pace);
+
+        let distance = totalSec / totalSecPace;
+
+        return isNaN(distance) ? "0" : distance.toFixed(3);
+  }
+  private static calcPace(distance: string, time: string): string {
+    let totSec = Time.getTotalSeconds(time);
+        var pace = totSec / parseFloat(distance); //s/km
+        pace = isNaN(pace) ? 0 : pace;
+        return Time.getTime(pace).createPaceString();
+  }
+
+  private static calcTime(distance: string, pace: string): string {
+    var totalDistance = parseFloat(distance); //km
         totalDistance = isNaN(totalDistance) ? 0 : totalDistance;
-        var totalSecPace = Time.getTotalSeconds(this.pace);
+        var totalSecPace = Time.getTotalSeconds(pace);
 
         var time = totalDistance * totalSecPace;
 
-        this.time = Time.getTime(time).createTimeString();
-        break;
-    }
+        return Time.getTime(time).createTimeString();
   }
 }
 

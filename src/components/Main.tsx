@@ -70,8 +70,8 @@ class Main extends React.Component<Props, State> {
     this.state = {
       laps: new Array<Laps>(),
       calcType: "PACE",
-      time: "",
-      distance: "0",
+      time: "50:00",
+      distance: "10",
       distanceError: false,
       predictedTimes: new PredictedTimes("0", "0"),
       pace: "",
@@ -279,16 +279,7 @@ class Main extends React.Component<Props, State> {
 
     this.setState({
       ...this.state,
-      laps: data.laps,
-      time: data.time,
-      distance: data.distance,
-      pace: data.pace,
-      timeError: data.timeError,
-      distanceError: data.distanceError,
-      paceError: data.paceError,
-      calcType: data.calcType,
-      predictedTimes: data.predictedTimes,
-      showLaps: data.showLaps
+      ...data
     });
   };
 
@@ -312,7 +303,6 @@ class Main extends React.Component<Props, State> {
   calcLaps = (distance: string, pace: string): Array<Laps> => {
     const distanceF = parseFloat(this.state.distance);
     const laps = [...Array(Math.floor(distanceF)).keys()].map((v, idx) => {
-      const left = distanceF - (idx + 1) >= 1 ? idx + 1 : distanceF;
       return new Laps(idx, pace, distanceF);
     });
 
