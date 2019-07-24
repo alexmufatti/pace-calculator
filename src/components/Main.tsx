@@ -84,7 +84,7 @@ class Main extends React.Component<Props, State> {
   render() {
     console.log("render...");
     const { classes } = this.props;
-    const data: Any = this.calc();
+    const data: any = this.calc();
     return (
       <div>
         <main className={classes.content}>
