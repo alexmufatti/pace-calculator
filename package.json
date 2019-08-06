@@ -30,10 +30,13 @@
   "browserslist": [
     ">0.2%",
     "not dead",
-    "not ie <= 11",
+    "not ie < 10",
     "not op_mini all"
   ],
   "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-object-assign": "^7.2.0",
+    "@babel/preset-env": "^7.5.5",
     "cross-env": "^5.2.0",
     "eslint": "^5.12.1",
     "eslint-config-prettier": "^4.0.0",
