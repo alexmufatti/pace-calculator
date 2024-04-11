@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Pace calculator",
+  "name": "Pace calculator",
   "icons": [
     {
       "src": "favicon-16x16.png",
