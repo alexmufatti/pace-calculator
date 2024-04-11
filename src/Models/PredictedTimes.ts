@@ -1,11 +1,9 @@
 import Time from "./Time";
-import timeUtils from "../timeUtils";
-import { number } from "prop-types";
 
 class PredictedTimes {
   constructor(time: string, distance: string) {
     let d = parseFloat(distance);
-    if (d === 0 || d === NaN) {
+    if (d === 0) {
       this.tenTime = this.halfMarathonTime = this.marathonTime = new Time(
         0,
         0,

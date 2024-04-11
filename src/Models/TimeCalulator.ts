@@ -1,14 +1,11 @@
 import timeUtils from "../timeUtils";
 import Time from "./Time";
 
-type TimeCalculatorData = {
-
-}
-
 class TimeCalculator {
-  distanceError: boolean = false;
-  paceError: boolean = false;
-  timeError: boolean = false;
+  public distanceError: boolean = false;
+  public paceError: boolean = false;
+  public timeError: boolean = false;
+
   constructor(
     public calcType: string,
     public time: string,
@@ -18,7 +15,7 @@ class TimeCalculator {
     this.calc();
   }
 
-  calc() {
+  private calc() {
     switch (this.calcType) {
       case "PACE":
         console.log("calc pace...");
@@ -50,14 +47,15 @@ class TimeCalculator {
           this.time = "0";
           break;
         }
+        console.log("distance: ", this.distance, "pace: ", this.pace)
         this.time = TimeCalculator.calcTime(this.distance, this.pace);
         break;
     }
   }
   private static calcDistance(pace: string, time: string): string {
-    var totalSec = Time.getTotalSeconds(time);
+    const totalSec = Time.getTotalSeconds(time);
 
-    var totalSecPace = Time.getTotalSeconds(pace);
+    const totalSecPace = Time.getTotalSeconds(pace);
 
     let distance = totalSec / totalSecPace;
 
@@ -65,17 +63,17 @@ class TimeCalculator {
   }
   private static calcPace(distance: string, time: string): string {
     let totSec = Time.getTotalSeconds(time);
-    var pace = totSec / parseFloat(distance); //s/km
+    let pace = totSec / parseFloat(distance); //s/km
     pace = isNaN(pace) ? 0 : pace;
     return Time.getTime(pace).createPaceString();
   }
 
   private static calcTime(distance: string, pace: string): string {
-    var totalDistance = parseFloat(distance); //km
+    let totalDistance = parseFloat(distance); //km
     totalDistance = isNaN(totalDistance) ? 0 : totalDistance;
-    var totalSecPace = Time.getTotalSeconds(pace);
+    let totalSecPace = Time.getTotalSeconds(pace);
 
-    var time = totalDistance * totalSecPace;
+    let time = totalDistance * totalSecPace;
 
     return Time.getTime(time).createTimeString();
   }
