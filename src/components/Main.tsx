@@ -1,17 +1,17 @@
 import {useState} from "react";
 import PredictedTimes from "../Models/PredictedTimes";
 import TimeCalculator from "../Models/TimeCalulator";
-import Lap from "../Models/Lap";
 import {
     Box,
     Button,
     Container, FormControl,
     FormControlLabel, FormLabel,
-    ListItem, ListItemText,
     Radio,
     RadioGroup, Stack,
     TextField, Typography
 } from "@mui/material";
+import Laps from "./Laps.tsx";
+
 
 
 const Main = () => {
@@ -38,36 +38,26 @@ const Main = () => {
         setShowLaps(!showLaps);
     };
 
-    const calcLaps = (distance: string, pace: string): Array<Lap> => {
-        const distanceF = parseFloat(distance);
-        if (isNaN(distanceF) || distanceF <= 0) return [];
-        return [...Array(Math.floor(distanceF))].map((_, idx) => {
-            return new Lap(idx, pace, distanceF);
-        });
-    };
-
-    let calculator = new TimeCalculator(
+    const calculator = new TimeCalculator(
         calcType,
         time,
         distance,
         pace
     );
 
-    let predictedTimes = new PredictedTimes(
+    const predictedTimes = new PredictedTimes(
         calculator.time,
         calculator.distance
     );
 
-    const laps = calcLaps(calculator.distance, calculator.pace);
-
-    console.log(calculator)
     return (
         <Container maxWidth={'md'}>
             <Box sx={{borderBottom: 1, borderColor: 'divider', paddingBottom: 2, marginBottom: 2}}>
                 <Typography variant={"h3"} align={'center'} gutterBottom={true}>Calculator</Typography>
                 <Stack alignItems={'center'}>
                     <FormControl>
-                        <FormLabel id="demo-radio-buttons-group-label">Select which field you want to calculate</FormLabel>
+                        <FormLabel id="demo-radio-buttons-group-label">Select which field you want to
+                            calculate</FormLabel>
                         <RadioGroup
                             row
                             aria-label="Type"
@@ -176,28 +166,7 @@ const Main = () => {
                 </Stack>
             </Box>
             <Box sx={{borderBottom: 1, borderColor: 'divider', paddingBottom: 2, marginBottom: 2}}>
-                <Typography variant={'h3'} align={'center'}>Laps</Typography>
-                <Stack>
-                    <Button
-                        onClick={clickShowLaps}
-                        size="small"
-                        variant="outlined"
-                    >
-                        Calculate Laps
-                    </Button>
-                    <div hidden={!showLaps}>
-                        {laps.map(l => {
-                            return (
-                                <ListItem key={l.key}>
-                                    <ListItemText
-                                        primary={l.time.timeString()}
-                                        secondary={l.key}
-                                    />
-                                </ListItem>
-                            );
-                        })}
-                    </div>
-                </Stack>
+                <Laps distance={calculator.distance} pace={calculator.pace}  onClick={clickShowLaps} showLaps={showLaps} />
             </Box>
         </Container>
     );
