@@ -2,7 +2,7 @@ import {useState} from "react";
 import PredictedTimes from "../Models/PredictedTimes";
 import TimeCalculator from "../Models/TimeCalulator";
 import Laps from "./Laps.tsx";
-import {Container, TextInput, Title, Radio, Stack, Group, Button} from "@mantine/core";
+import {Container, TextInput, Title, Radio, Stack, Group, Button, Divider} from "@mantine/core";
 
 
 
@@ -12,7 +12,6 @@ const Main = () => {
     const [time, setTime] = useState<string>("50:00")
     const [distance, setDistance] = useState<string>("10")
     const [pace, setPace] = useState<string>("")
-    const [showLaps, setShowLaps] = useState<boolean>(false);
 
     const click10 = () => {
         setDistance("10")
@@ -26,9 +25,7 @@ const Main = () => {
         setDistance("42.195");
     };
 
-    const clickShowLaps = () => {
-        setShowLaps(!showLaps);
-    };
+
 
     const calculator = new TimeCalculator(
         calcType,
@@ -44,7 +41,7 @@ const Main = () => {
 
     return (
         <Container >
-            <Stack align={'center'}>
+            <Stack align={'center'} py={'md'}>
                 <Title>Calculator</Title>
                 <Stack>
                         <Radio.Group
@@ -56,6 +53,7 @@ const Main = () => {
                                 setCalcType(e)
                             }}
                         >
+                            <Group grow>
                             <Radio
                                 value="PACE"
                                 label="Pace"
@@ -68,6 +66,7 @@ const Main = () => {
                                 value="DISTANCE"
                                 label="Distance"
                             />
+                            </Group>
                         </Radio.Group>
                     <TextInput
                         error={calculator.timeError}
@@ -124,8 +123,9 @@ const Main = () => {
                     />
                 </Stack>
             </Stack>
-            <Stack  align={'center'}>
-                <Title variant={'h3'}>Pace Prediction</Title>
+            <Divider />
+            <Stack  align={'center'} py={'md'}>
+                <Title variant={'h3'}>Race Prediction</Title>
                 <Group align={'center'}>
                     <Stack align={'center'}>
                         <Title order={3}>10 Km</Title>
@@ -144,7 +144,8 @@ const Main = () => {
                     </Stack>
                 </Group>
             </Stack>
-            <Laps distance={calculator.distance} pace={calculator.pace}  onClick={clickShowLaps} showLaps={showLaps} />
+            <Divider />
+            <Laps distance={calculator.distance} pace={calculator.pace} />
         </Container>
     );
 }

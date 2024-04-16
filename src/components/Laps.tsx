@@ -3,17 +3,18 @@ import {useRef, useState} from "react";
 import {ActionIcon, Button, rem, Stack, Table, Title} from "@mantine/core";
 import {TimeInput} from "@mantine/dates";
 import {IconClock} from "@tabler/icons-react";
-import Time from "../Models/Time.ts";
 
-export default function Laps(props: { onClick: () => void, showLaps: boolean, distance: string, pace: string }) {
+export default function Laps(props: { distance: string, pace: string }) {
     const ref = useRef<HTMLInputElement>(null);
     const now = new Date();
     const [startTime, setStartTime] = useState<string>(`${now.getHours()}:${now.getMinutes()}`);
+    const [showLaps, setShowLaps] = useState<boolean>(false);
+
     const calcLaps = (distance: string, pace: string): Array<Lap> => {
         const distanceF = parseFloat(distance);
         if (isNaN(distanceF) || distanceF <= 0) return [];
         return [...Array(Math.floor(distanceF))].map((_, idx) => {
-            return new Lap(idx, pace, distanceF);
+            return new Lap(idx, pace, distanceF, startTime);
         });
     };
     const laps = calcLaps(props.distance, props.pace);
@@ -22,8 +23,11 @@ export default function Laps(props: { onClick: () => void, showLaps: boolean, di
             <IconClock style={{width: rem(16), height: rem(16)}} stroke={1.5}/>
         </ActionIcon>
     );
+    const clickShowLaps = () => {
+        setShowLaps(!showLaps);
+    };
     return (
-        <Stack align={'center'}>
+        <Stack align={'center'}  py={'md'}>
             <Title>Laps</Title>
             <Stack align={'center'}>
                 <TimeInput ref={ref} rightSection={pickerControl}
@@ -31,13 +35,13 @@ export default function Laps(props: { onClick: () => void, showLaps: boolean, di
                            onChange={(newVal) => setStartTime(newVal.target.value)}/>
 
                 <Button
-                    onClick={props.onClick}
+                    onClick={clickShowLaps}
                     size="small"
                     variant="outlined"
                 >
                     Calculate Laps
                 </Button>
-                <Table hidden={!props.showLaps} horizontalSpacing="md" verticalSpacing="sm" striped withTableBorder
+                <Table hidden={!showLaps} horizontalSpacing="md" verticalSpacing="sm" striped withTableBorder
                        withColumnBorders>
                     <Table.Thead>
                         <Table.Tr>
@@ -48,15 +52,10 @@ export default function Laps(props: { onClick: () => void, showLaps: boolean, di
                     </Table.Thead>
                     <Table.Tbody>
                         {laps.map((l) => {
-                            const time = new Date().setHours(parseInt(startTime.split(':')[0]), parseInt(startTime.split(':')[1]));
-                            const lapTime = new Date(time + l.time.hou * 60 * 60 * 1000
-                                + l.time.min * 60 * 1000
-                                + l.time.sec * 1000)
-
                             return (<Table.Tr>
                                 <Table.Td>{l.key}</Table.Td>
                                 <Table.Td>{l.time.timeString()}</Table.Td>
-                                <Table.Td>{`${ Time.pad(lapTime.getHours().toString(),'0')}:${ Time.pad(lapTime.getMinutes().toString(),'0')}`}</Table.Td>
+                                <Table.Td>{l.passTime}</Table.Td>
                             </Table.Tr>)
                         })}
                     </Table.Tbody>

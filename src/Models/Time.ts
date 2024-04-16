@@ -73,7 +73,6 @@ class Time {
   }
 
   static pad(value: string, char: string): string {
-    value = value + "";
     if (value.indexOf(".") >= 0)
       return (
         char.substring(0, char.length - value.split(".")[0].length) + value
