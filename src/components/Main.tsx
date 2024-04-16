@@ -1,16 +1,8 @@
 import {useState} from "react";
 import PredictedTimes from "../Models/PredictedTimes";
 import TimeCalculator from "../Models/TimeCalulator";
-import {
-    Box,
-    Button,
-    Container, FormControl,
-    FormControlLabel, FormLabel,
-    Radio,
-    RadioGroup, Stack,
-    TextField, Typography
-} from "@mui/material";
 import Laps from "./Laps.tsx";
+import {Container, TextInput, Title, Radio, Stack, Group, Button} from "@mantine/core";
 
 
 
@@ -51,41 +43,33 @@ const Main = () => {
     );
 
     return (
-        <Container maxWidth={'md'}>
-            <Box sx={{borderBottom: 1, borderColor: 'divider', paddingBottom: 2, marginBottom: 2}}>
-                <Typography variant={"h3"} align={'center'} gutterBottom={true}>Calculator</Typography>
-                <Stack alignItems={'center'}>
-                    <FormControl>
-                        <FormLabel id="demo-radio-buttons-group-label">Select which field you want to
-                            calculate</FormLabel>
-                        <RadioGroup
-                            row
+        <Container >
+            <Stack align={'center'}>
+                <Title>Calculator</Title>
+                <Stack>
+                        <Radio.Group
                             aria-label="Type"
                             name="calcType"
                             value={calculator.calcType}
+                            label={'Select which field you want to calculate'}
                             onChange={(e) => {
-                                setCalcType(e.target.value)
+                                setCalcType(e)
                             }}
                         >
-                            <FormControlLabel
+                            <Radio
                                 value="PACE"
-                                control={<Radio/>}
                                 label="Pace"
                             />
-                            <FormControlLabel
+                            <Radio
                                 value="TIME"
-                                control={<Radio/>}
                                 label="Time"
                             />
-                            <FormControlLabel
+                            <Radio
                                 value="DISTANCE"
-                                control={<Radio/>}
                                 label="Distance"
                             />
-                        </RadioGroup>
-                    </FormControl>
-                    <TextField
-                        variant="outlined"
+                        </Radio.Group>
+                    <TextInput
                         error={calculator.timeError}
                         disabled={calculator.calcType === "TIME"}
                         name="time"
@@ -94,10 +78,8 @@ const Main = () => {
                         onChange={(e) => {
                             setTime(e.target.value)
                         }}
-                        margin="normal"
                     />
-                    <TextField
-                        variant="outlined"
+                    <TextInput
                         error={calculator.distanceError}
                         disabled={calculator.calcType === "DISTANCE"}
                         name="distance"
@@ -106,9 +88,8 @@ const Main = () => {
                         onChange={(e) => {
                             setCalcType(e.target.value)
                         }}
-                        margin="normal"
                     />
-                    <Stack direction={'row'}>
+                    <Group  >
                         <Button
                             onClick={click10}
                             size="small"
@@ -130,9 +111,8 @@ const Main = () => {
                         >
                             Marathon
                         </Button>
-                    </Stack>
-                    <TextField
-                        variant="outlined"
+                    </Group>
+                    <TextInput
                         error={calculator.paceError}
                         disabled={calculator.calcType === "PACE"}
                         name="pace"
@@ -141,33 +121,30 @@ const Main = () => {
                         onChange={(e) => {
                             setPace(e.target.value)
                         }}
-                        margin="normal"
                     />
                 </Stack>
-            </Box>
-            <Box sx={{borderBottom: 1, borderColor: 'divider', paddingBottom: 2, marginBottom: 2}}>
-                <Typography variant={'h3'} align={'center'}>Pace Prediction</Typography>
-                <Stack direction={'row'} justifyContent={'center'} gap={5}>
-                    <Stack alignItems={'center'}>
-                        <Typography variant={'h6'}>10 Km</Typography>
+            </Stack>
+            <Stack  align={'center'}>
+                <Title variant={'h3'}>Pace Prediction</Title>
+                <Group align={'center'}>
+                    <Stack align={'center'}>
+                        <Title order={3}>10 Km</Title>
 
                         <div>{predictedTimes.tenTime.timeString()}</div>
                     </Stack>
-                    <Stack alignItems={'center'}>
-                        <Typography variant={'h6'}>Half marathon</Typography>
+                    <Stack align={'center'}>
+                        <Title order={3}>Half marathon</Title>
                         <div>{predictedTimes.halfMarathonTime.timeString()}
                         </div>
                     </Stack>
-                    <Stack alignItems={'center'}>
-                        <Typography variant={'h6'}>Marathon</Typography>
+                    <Stack align={'center'}>
+                        <Title order={3}>Marathon</Title>
                         <div>{predictedTimes.marathonTime.timeString()}
                         </div>
                     </Stack>
-                </Stack>
-            </Box>
-            <Box sx={{borderBottom: 1, borderColor: 'divider', paddingBottom: 2, marginBottom: 2}}>
-                <Laps distance={calculator.distance} pace={calculator.pace}  onClick={clickShowLaps} showLaps={showLaps} />
-            </Box>
+                </Group>
+            </Stack>
+            <Laps distance={calculator.distance} pace={calculator.pace}  onClick={clickShowLaps} showLaps={showLaps} />
         </Container>
     );
 }

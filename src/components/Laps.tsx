@@ -1,12 +1,14 @@
 import Lap from "../Models/Lap.ts";
-import {Button, ListItem, ListItemText, Stack, Typography} from "@mui/material";
-import {TimePicker} from "@mui/x-date-pickers";
-import {useState} from "react";
-import dayjs from 'dayjs';
+import {useRef, useState} from "react";
+import {ActionIcon, Button, rem, Stack, Table, Title} from "@mantine/core";
+import {TimeInput} from "@mantine/dates";
+import {IconClock} from "@tabler/icons-react";
+import Time from "../Models/Time.ts";
 
 export default function Laps(props: { onClick: () => void, showLaps: boolean, distance: string, pace: string }) {
-
-    const [startTime, setStartTime] = useState<dayjs.Dayjs | null>(dayjs());
+    const ref = useRef<HTMLInputElement>(null);
+    const now = new Date();
+    const [startTime, setStartTime] = useState<string>(`${now.getHours()}:${now.getMinutes()}`);
     const calcLaps = (distance: string, pace: string): Array<Lap> => {
         const distanceF = parseFloat(distance);
         if (isNaN(distanceF) || distanceF <= 0) return [];
@@ -15,32 +17,50 @@ export default function Laps(props: { onClick: () => void, showLaps: boolean, di
         });
     };
     const laps = calcLaps(props.distance, props.pace);
-    return <>
-        <Typography variant={"h3"} align={"center"}>Laps</Typography>
-        <Stack>
-            <TimePicker ampm={false}  views={['minutes', 'seconds']} timeSteps={{minutes: 1}} value={startTime} onAccept={(newVal) => setStartTime(newVal)} onChange={(newVal) => setStartTime(newVal)} />
-            <Button
-                onClick={props.onClick}
-                size="small"
-                variant="outlined"
-            >
-                Calculate Laps
-            </Button>
-            <div hidden={!props.showLaps}>
-                <ListItem>
-                    <ListItemText><b>Lap</b></ListItemText>
-                    <ListItemText><b>Elapsed</b></ListItemText>
-                    <ListItemText><b>Time</b></ListItemText>
-                </ListItem>
-                    {laps.map((l)=> (<ListItem key={l.key}>
-                    <ListItemText
-                    >{l.key}</ListItemText>
-                    <ListItemText >{l.time.timeString()}</ListItemText>
-                    <ListItemText >{startTime?.add(l.time.hou, "hours")
-                        .add(l.time.min, "minutes")
-                        .add(l.time.sec, "seconds").format("HH:mm:ss")}</ListItemText>
-                </ListItem>))}
-            </div>
-        </Stack>
-    </>;
+    const pickerControl = (
+        <ActionIcon variant="subtle" color="gray" onClick={() => ref.current?.showPicker()}>
+            <IconClock style={{width: rem(16), height: rem(16)}} stroke={1.5}/>
+        </ActionIcon>
+    );
+    return (
+        <Stack align={'center'}>
+            <Title>Laps</Title>
+            <Stack align={'center'}>
+                <TimeInput ref={ref} rightSection={pickerControl}
+                           onClick={() => ref.current?.showPicker()} value={startTime}
+                           onChange={(newVal) => setStartTime(newVal.target.value)}/>
+
+                <Button
+                    onClick={props.onClick}
+                    size="small"
+                    variant="outlined"
+                >
+                    Calculate Laps
+                </Button>
+                <Table hidden={!props.showLaps} horizontalSpacing="md" verticalSpacing="sm" striped withTableBorder
+                       withColumnBorders>
+                    <Table.Thead>
+                        <Table.Tr>
+                            <Table.Th>Lap</Table.Th>
+                            <Table.Th>Elapsed Time</Table.Th>
+                            <Table.Th>Time</Table.Th>
+                        </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>
+                        {laps.map((l) => {
+                            const time = new Date().setHours(parseInt(startTime.split(':')[0]), parseInt(startTime.split(':')[1]));
+                            const lapTime = new Date(time + l.time.hou * 60 * 60 * 1000
+                                + l.time.min * 60 * 1000
+                                + l.time.sec * 1000)
+
+                            return (<Table.Tr>
+                                <Table.Td>{l.key}</Table.Td>
+                                <Table.Td>{l.time.timeString()}</Table.Td>
+                                <Table.Td>{`${ Time.pad(lapTime.getHours().toString(),'0')}:${ Time.pad(lapTime.getMinutes().toString(),'0')}`}</Table.Td>
+                            </Table.Tr>)
+                        })}
+                    </Table.Tbody>
+                </Table>
+            </Stack>
+        </Stack>);
 }

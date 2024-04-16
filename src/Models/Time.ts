@@ -72,7 +72,7 @@ class Time {
     return t.sec + t.min * 60 + t.hou * 60 * 60;
   }
 
-  private static pad(value: string, char: string): string {
+  static pad(value: string, char: string): string {
     value = value + "";
     if (value.indexOf(".") >= 0)
       return (
