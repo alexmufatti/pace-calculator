@@ -1,9 +1,8 @@
 import {useState} from "react";
 import PredictedTimes from "../Models/PredictedTimes";
-import TimeCalculator from "../Models/TimeCalulator";
 import Laps from "./Laps.tsx";
 import {Container, TextInput, Title, Radio, Stack, Group, Button, Divider} from "@mantine/core";
-
+import {calculateValues} from "../Models/TimeCalulator.ts";
 
 
 const Main = () => {
@@ -26,8 +25,15 @@ const Main = () => {
     };
 
 
-
-    const calculator = new TimeCalculator(
+    const {
+        calculatedTime,
+        calculatedDistance,
+        calculatedPace,
+        calculatedCalcType,
+        calculatedPaceError,
+        calculatedDistanceError,
+        calculatedTimeError
+    } = calculateValues(
         calcType,
         time,
         distance,
@@ -35,25 +41,25 @@ const Main = () => {
     );
 
     const predictedTimes = new PredictedTimes(
-        calculator.time,
-        calculator.distance
+        calculatedTime,
+        calculatedDistance
     );
 
     return (
-        <Container >
+        <Container>
             <Stack align={'center'} py={'md'}>
                 <Title>Calculator</Title>
                 <Stack>
-                        <Radio.Group
-                            aria-label="Type"
-                            name="calcType"
-                            value={calculator.calcType}
-                            label={'Select which field you want to calculate'}
-                            onChange={(e) => {
-                                setCalcType(e)
-                            }}
-                        >
-                            <Group grow>
+                    <Radio.Group
+                        aria-label="Type"
+                        name="calcType"
+                        value={calculatedCalcType}
+                        label={'Select which field you want to calculate'}
+                        onChange={(e) => {
+                            setCalcType(e)
+                        }}
+                    >
+                        <Group grow>
                             <Radio
                                 value="PACE"
                                 label="Pace"
@@ -66,29 +72,29 @@ const Main = () => {
                                 value="DISTANCE"
                                 label="Distance"
                             />
-                            </Group>
-                        </Radio.Group>
+                        </Group>
+                    </Radio.Group>
                     <TextInput
-                        error={calculator.timeError}
-                        disabled={calculator.calcType === "TIME"}
+                        error={calculatedTimeError}
+                        disabled={calculatedCalcType === "TIME"}
                         name="time"
                         label="Time (HH:MM:SS)"
-                        value={calculator.time}
+                        value={calculatedTime}
                         onChange={(e) => {
                             setTime(e.target.value)
                         }}
                     />
                     <TextInput
-                        error={calculator.distanceError}
-                        disabled={calculator.calcType === "DISTANCE"}
+                        error={calculatedDistanceError}
+                        disabled={calculatedCalcType === "DISTANCE"}
                         name="distance"
                         label="Distance (Km)"
-                        value={calculator.distance}
+                        value={calculatedDistance}
                         onChange={(e) => {
                             setDistance(e.target.value)
                         }}
                     />
-                    <Group  >
+                    <Group>
                         <Button
                             onClick={click10}
                             size="small"
@@ -112,19 +118,19 @@ const Main = () => {
                         </Button>
                     </Group>
                     <TextInput
-                        error={calculator.paceError}
-                        disabled={calculator.calcType === "PACE"}
+                        error={calculatedPaceError}
+                        disabled={calculatedCalcType === "PACE"}
                         name="pace"
                         label="Pace (MM:SS.mm)"
-                        value={calculator.pace}
+                        value={calculatedPace}
                         onChange={(e) => {
                             setPace(e.target.value)
                         }}
                     />
                 </Stack>
             </Stack>
-            <Divider />
-            <Stack  align={'center'} py={'md'}>
+            <Divider/>
+            <Stack align={'center'} py={'md'}>
                 <Title variant={'h3'}>Race Prediction</Title>
                 <Group align={'center'}>
                     <Stack align={'center'}>
@@ -144,8 +150,8 @@ const Main = () => {
                     </Stack>
                 </Group>
             </Stack>
-            <Divider />
-            <Laps distance={calculator.distance} pace={calculator.pace} />
+            <Divider/>
+            <Laps distance={calculatedDistance} pace={calculatedPace}/>
         </Container>
     );
 }
