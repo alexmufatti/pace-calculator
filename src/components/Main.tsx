@@ -85,7 +85,7 @@ const Main = () => {
                         label="Distance (Km)"
                         value={calculator.distance}
                         onChange={(e) => {
-                            setCalcType(e.target.value)
+                            setDistance(e.target.value)
                         }}
                     />
                     <Group  >

@@ -44,6 +44,7 @@ class TimeCalculator {
         this.distanceError = !timeUtils.validateDistance(this.distance);
         this.paceError = !timeUtils.validatePace(this.pace);
         if (this.paceError || this.distanceError) {
+          console.log("error", this.paceError, this.distanceError);
           this.time = "0";
           break;
         }
