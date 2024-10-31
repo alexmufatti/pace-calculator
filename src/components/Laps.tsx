@@ -5,7 +5,7 @@ import {TimeInput} from "@mantine/dates";
 import {IconClock} from "@tabler/icons-react";
 import Time from "../Models/Time.ts";
 
-const MileToMk = 1.60934;
+export const MileToMk = 1.60934;
 
 export default function Laps(props: { distance: string, pace: string }) {
     const ref = useRef<HTMLInputElement>(null);

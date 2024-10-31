@@ -1,8 +1,9 @@
 import {useState} from "react";
 import PredictedTimes from "../Models/PredictedTimes";
-import Laps from "./Laps.tsx";
+import Laps, {MileToMk} from "./Laps.tsx";
 import {Container, TextInput, Title, Radio, Stack, Group, Button, Divider} from "@mantine/core";
 import {calculateValues} from "../Models/TimeCalulator.ts";
+import Time from "../Models/Time.ts";
 
 
 const Main = () => {
@@ -127,6 +128,7 @@ const Main = () => {
                             setPace(e.target.value)
                         }}
                     />
+                    <div>Mile pace: {Time.getTime(Time.getTotalSeconds(calculatedPace) * MileToMk).createPaceString()}</div>
                 </Stack>
             </Stack>
             <Divider/>
