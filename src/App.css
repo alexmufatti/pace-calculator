@@ -1,0 +1,278 @@
+.calculator-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow:
+        0 8px 32px 0 rgba(31, 38, 135, 0.37),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+        0 2px 4px 0 rgba(255, 255, 255, 0.2) inset;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 2rem auto;
+    max-width: 650px;
+    transition: all 0.3s ease;
+}
+
+.calculator-card:hover {
+    box-shadow:
+        0 12px 48px 0 rgba(31, 38, 135, 0.45),
+        0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+        0 2px 4px 0 rgba(255, 255, 255, 0.25) inset;
+    transform: translateY(-2px);
+}
+
+.prediction-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    border-radius: 20px;
+    padding: 1.8rem;
+    box-shadow:
+        0 4px 16px 0 rgba(31, 38, 135, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: default;
+}
+
+.prediction-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+        0 12px 32px 0 rgba(31, 38, 135, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+        0 0 20px 0 rgba(59, 130, 246, 0.4);
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.laps-section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    margin: 2rem auto;
+}
+
+.main-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffffff 0%, #93c5fd 50%, #dbeafe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+    letter-spacing: -0.5px;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+    text-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(255, 255, 255, 0.3);
+    letter-spacing: -0.3px;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #dbeafe;
+    text-shadow:
+        0 0 20px rgba(59, 130, 246, 0.6),
+        0 0 40px rgba(59, 130, 246, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.5px;
+}
+
+.mile-pace-display {
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.25) 0%, rgba(251, 146, 60, 0.2) 100%);
+    padding: 1rem 2rem;
+    border-radius: 16px;
+    border: 2px solid rgba(249, 115, 22, 0.5);
+    display: inline-block;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #fed7aa;
+    box-shadow:
+        0 4px 16px rgba(249, 115, 22, 0.3),
+        0 0 20px rgba(249, 115, 22, 0.2) inset;
+    transition: all 0.3s ease;
+    animation: pulseMile 2s ease-in-out infinite;
+}
+
+.mile-pace-display:hover {
+    transform: scale(1.05);
+    box-shadow:
+        0 6px 24px rgba(249, 115, 22, 0.4),
+        0 0 30px rgba(249, 115, 22, 0.3) inset;
+}
+
+/* Container per allineare i display dei risultati */
+.result-display-container {
+    margin-top: 0;
+}
+
+/* Stile per input disabilitati come display prominenti */
+.input-display {
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.3) 0%, rgba(251, 146, 60, 0.25) 100%);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    border: 2px solid rgba(249, 115, 22, 0.6);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #ffffff;
+    box-shadow:
+        0 4px 16px rgba(249, 115, 22, 0.35),
+        0 0 20px rgba(249, 115, 22, 0.25) inset;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 100%;
+    animation: glow 2s ease-in-out infinite;
+}
+
+.input-display:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 24px rgba(249, 115, 22, 0.45),
+        0 0 30px rgba(249, 115, 22, 0.35) inset;
+}
+
+.input-display-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fb923c;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(249, 115, 22, 0.5);
+}
+
+@keyframes pulseMile {
+    0%, 100% {
+        box-shadow:
+            0 4px 16px rgba(249, 115, 22, 0.3),
+            0 0 20px rgba(249, 115, 22, 0.2) inset;
+    }
+    50% {
+        box-shadow:
+            0 6px 24px rgba(249, 115, 22, 0.4),
+            0 0 30px rgba(249, 115, 22, 0.3) inset;
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow:
+            0 4px 16px rgba(249, 115, 22, 0.35),
+            0 0 20px rgba(249, 115, 22, 0.25) inset;
+    }
+    50% {
+        box-shadow:
+            0 6px 24px rgba(249, 115, 22, 0.5),
+            0 0 30px rgba(249, 115, 22, 0.4) inset;
+    }
+}
+
+.table-container {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+        0 4px 16px 0 rgba(31, 38, 135, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeIn 0.5s ease-out;
+    transition: all 0.3s ease;
+}
+
+.table-container:hover {
+    box-shadow:
+        0 6px 24px 0 rgba(31, 38, 135, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .calculator-card {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .main-title {
+        font-size: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .prediction-card {
+        padding: 1.2rem;
+    }
+
+    .stat-value {
+        font-size: 1.4rem;
+    }
+
+    .mile-pace-display {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+/* Smooth animations for all interactive elements */
+button, input, select, textarea {
+    transition: all 0.3s ease;
+}
+
+/* Custom focus states */
+input:focus, textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
+
+/* Improved button hover effects */
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Stile per il bottone Show/Hide Laps */
+.laps-toggle-button {
+    background: linear-gradient(135deg, rgb(194, 65, 12) 0%, rgb(249, 115, 22) 100%) !important;
+    border: 2px solid rgb(154, 52, 18) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    padding: 0.75rem 2rem !important;
+    box-shadow:
+        0 4px 20px rgba(249, 115, 22, 0.5),
+        0 0 30px rgba(249, 115, 22, 0.3) inset !important;
+    transition: all 0.3s ease !important;
+}
+
+.laps-toggle-button:hover {
+    background: linear-gradient(135deg, rgb(249, 115, 22) 0%, rgb(251, 146, 60) 100%) !important;
+    border-color: rgb(234, 88, 12) !important;
+    box-shadow:
+        0 8px 32px rgba(249, 115, 22, 0.6),
+        0 0 40px rgba(251, 146, 60, 0.4) inset !important;
+    transform: translateY(-3px) scale(1.08) !important;
+}
+

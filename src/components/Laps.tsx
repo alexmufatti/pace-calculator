@@ -1,9 +1,10 @@
 import Lap from "../Models/Lap.ts";
 import {useRef, useState} from "react";
-import {ActionIcon, Button, Flex, rem, Stack, Table, Title} from "@mantine/core";
+import {ActionIcon, Button, Flex, rem, Stack, Table, Title, Box} from "@mantine/core";
 import {TimeInput} from "@mantine/dates";
 import {IconClock} from "@tabler/icons-react";
 import Time from "../Models/Time.ts";
+import "../App.css";
 
 export const MileToMk = 1.60934;
 
@@ -39,7 +40,7 @@ export default function Laps(props: { distance: string, pace: string }) {
     };
     return (
         <Stack align={'center'}  py={'md'}>
-            <Title>Laps</Title>
+            <Title className="section-title" order={2}>Laps</Title>
             <Stack align={'center'}>
                 <TimeInput ref={ref} rightSection={pickerControl}
                            onClick={() => ref.current?.showPicker()} value={startTime}
@@ -47,13 +48,16 @@ export default function Laps(props: { distance: string, pace: string }) {
 
                 <Button
                     onClick={clickShowLaps}
-                    size="small"
-                    variant="outlined"
+                    size="md"
+                    variant="light"
+                    radius="md"
+                    className="laps-toggle-button"
                 >
-                    Calculate Laps
+                    {showLaps ? 'Hide Laps' : 'Show Laps'}
                 </Button>
-                <Flex direction={'row'} gap={20}>
-                <Table hidden={!showLaps} horizontalSpacing="md" verticalSpacing="sm" striped withTableBorder
+                <Flex direction={'row'} gap={20} wrap="wrap" justify="center">
+                <Box className="table-container" hidden={!showLaps}>
+                <Table horizontalSpacing="md" verticalSpacing="sm" striped withTableBorder
                        withColumnBorders>
                     <Table.Thead>
                         <Table.Tr>
@@ -64,7 +68,7 @@ export default function Laps(props: { distance: string, pace: string }) {
                     </Table.Thead>
                     <Table.Tbody>
                         {laps.map((l) => {
-                            return (<Table.Tr>
+                            return (<Table.Tr key={l.key}>
                                 <Table.Td>Km {l.key}</Table.Td>
                                 <Table.Td>{l.time.timeString()}</Table.Td>
                                 <Table.Td>{l.passTime}</Table.Td>
@@ -72,7 +76,9 @@ export default function Laps(props: { distance: string, pace: string }) {
                         })}
                     </Table.Tbody>
                 </Table>
-                <Table hidden={!showLaps} horizontalSpacing="md" verticalSpacing="sm" striped withTableBorder
+                </Box>
+                <Box className="table-container" hidden={!showLaps}>
+                <Table horizontalSpacing="md" verticalSpacing="sm" striped withTableBorder
                        withColumnBorders>
                     <Table.Thead>
                         <Table.Tr>
@@ -83,7 +89,7 @@ export default function Laps(props: { distance: string, pace: string }) {
                     </Table.Thead>
                     <Table.Tbody>
                         {lapsMile.map((l) => {
-                            return (<Table.Tr>
+                            return (<Table.Tr key={l.key}>
                                 <Table.Td>Mile {l.key}</Table.Td>
                                 <Table.Td>{l.time.timeString()}</Table.Td>
                                 <Table.Td>{l.passTime}</Table.Td>
@@ -91,6 +97,7 @@ export default function Laps(props: { distance: string, pace: string }) {
                         })}
                     </Table.Tbody>
                 </Table>
+                </Box>
                 </Flex>
             </Stack>
         </Stack>);

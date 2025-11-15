@@ -1,9 +1,10 @@
 import {useState} from "react";
 import PredictedTimes from "../Models/PredictedTimes";
 import Laps, {MileToMk} from "./Laps.tsx";
-import {Container, TextInput, Title, Radio, Stack, Group, Button, Divider} from "@mantine/core";
+import {Container, TextInput, Title, Radio, Stack, Group, Button, Divider, Paper, Box} from "@mantine/core";
 import {calculateValues} from "../Models/TimeCalulator.ts";
 import Time from "../Models/Time.ts";
+import "../App.css";
 
 
 const Main = () => {
@@ -47,10 +48,11 @@ const Main = () => {
     );
 
     return (
-        <Container>
+        <Container size="lg" py="xl">
+            <Paper className="calculator-card animate-in" shadow="xl">
             <Stack align={'center'} py={'md'}>
-                <Title>Calculator</Title>
-                <Stack>
+                <Title className="main-title" order={1}>Pace Calculator</Title>
+                <Stack w="100%" maw={500}>
                     <Radio.Group
                         aria-label="Type"
                         name="calcType"
@@ -75,65 +77,88 @@ const Main = () => {
                             />
                         </Group>
                     </Radio.Group>
-                    <TextInput
-                        error={calculatedTimeError}
-                        disabled={calculatedCalcType === "TIME"}
-                        name="time"
-                        label="Time (HH:MM:SS)"
-                        value={calculatedTime}
-                        onChange={(e) => {
-                            setTime(e.target.value)
-                        }}
-                    />
-                    <TextInput
-                        error={calculatedDistanceError}
-                        disabled={calculatedCalcType === "DISTANCE"}
-                        name="distance"
-                        label="Distance (Km)"
-                        value={calculatedDistance}
-                        onChange={(e) => {
-                            setDistance(e.target.value)
-                        }}
-                    />
-                    <Group>
+                    {calculatedCalcType === "TIME" ? (
+                        <Box className="result-display-container">
+                            <div className="input-display-label">Time (HH:MM:SS)</div>
+                            <div className="input-display">{calculatedTime}</div>
+                        </Box>
+                    ) : (
+                        <TextInput
+                            error={calculatedTimeError}
+                            name="time"
+                            label="Time (HH:MM:SS)"
+                            value={calculatedTime}
+                            onChange={(e) => {
+                                setTime(e.target.value)
+                            }}
+                        />
+                    )}
+                    {calculatedCalcType === "DISTANCE" ? (
+                        <Box className="result-display-container">
+                            <div className="input-display-label">Distance (Km)</div>
+                            <div className="input-display">{calculatedDistance}</div>
+                        </Box>
+                    ) : (
+                        <TextInput
+                            error={calculatedDistanceError}
+                            name="distance"
+                            label="Distance (Km)"
+                            value={calculatedDistance}
+                            onChange={(e) => {
+                                setDistance(e.target.value)
+                            }}
+                        />
+                    )}
+                    <Group grow>
                         <Button
                             onClick={click10}
-                            size="small"
-                            variant="outlined"
+                            size="md"
+                            variant="light"
+                            radius="md"
                         >
                             10k
                         </Button>
                         <Button
                             onClick={clickHM}
-                            size="small"
-                            variant="outlined"
+                            size="md"
+                            variant="light"
+                            radius="md"
                         >
                             Half Marathon
                         </Button>
                         <Button
                             onClick={clickM}
-                            size="small"
-                            variant="outlined"
+                            size="md"
+                            variant="light"
+                            radius="md"
                         >
                             Marathon
                         </Button>
                     </Group>
-                    <TextInput
-                        error={calculatedPaceError}
-                        disabled={calculatedCalcType === "PACE"}
-                        name="pace"
-                        label="Pace (MM:SS.mm)"
-                        value={calculatedPace}
-                        onChange={(e) => {
-                            setPace(e.target.value)
-                        }}
-                    />
-                    <div>Mile pace: {Time.getTime(Time.getTotalSeconds(calculatedPace) * MileToMk).createPaceString()}</div>
+                    {calculatedCalcType === "PACE" ? (
+                        <Box className="result-display-container">
+                            <div className="input-display-label">Pace (MM:SS.mm)</div>
+                            <div className="input-display">{calculatedPace}</div>
+                        </Box>
+                    ) : (
+                        <TextInput
+                            error={calculatedPaceError}
+                            name="pace"
+                            label="Pace (MM:SS.mm)"
+                            value={calculatedPace}
+                            onChange={(e) => {
+                                setPace(e.target.value)
+                            }}
+                        />
+                    )}
+                    <Box className="mile-pace-display" ta="center">
+                        <strong>Mile pace:</strong> {Time.getTime(Time.getTotalSeconds(calculatedPace) * MileToMk).createPaceString()}
+                    </Box>
                 </Stack>
             </Stack>
-            <Divider/>
+            <Divider my="xl" opacity={0.3}/>
             <Stack align={'center'} py={'md'}>
-                <Title variant={'h3'}>Race Prediction</Title>
+                <Title className="section-title" order={2}>Race Prediction</Title>
                 <Group align={'center'}>
                     <Stack align={'center'}>
                         <Title order={3}>10 Km</Title>
@@ -154,6 +179,7 @@ const Main = () => {
             </Stack>
             <Divider/>
             <Laps distance={calculatedDistance} pace={calculatedPace}/>
+            </Paper>
         </Container>
     );
 }
